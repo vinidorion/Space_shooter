@@ -5,15 +5,31 @@ using UnityEngine;
 
 public class Laser : MonoBehaviour
 {
-    [SerializeField] private float _speed = 20;
-    [SerializeField] private float _dmg = 20;
+    public static Laser Instance;
 
-    public float Dmg() 
+    [SerializeField] private float _speed = 20;
+    [SerializeField] private int _dmg = 20;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    public int Dmg()
     { return _dmg; }
+
+    public void SetSpeed(float speed)
+    {
+        _speed = speed;
+    }
 
     void Update()
     {
         transform.Translate(Vector3.up * Time.deltaTime * _speed);
-        if (transform.position.y > 7) Destroy(this.gameObject);
+        if (transform.position.y > 7)
+        {
+            if (transform.parent == null) Destroy(this.gameObject);
+            else Destroy(transform.parent.gameObject);
+        }
     }
 }
